@@ -103,7 +103,7 @@ char *f_get_s(char *str, const int count, FILE *file)
 
     size_t i = 0;
 
-    for(int temp_ch = 0; (temp_ch != (int) "\r") && (temp_ch != EOF) && (i < (count - 1)); i++)
+    for(int temp_ch = 0; (temp_ch != (int) '\r') && (temp_ch != EOF) && (i < (count - 1)); i++)
     {
         temp_ch = fgetc(file);
         str[i] = (char) temp_ch;

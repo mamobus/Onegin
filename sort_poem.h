@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "str_funcs.h"
 #include <assert.h>
+#include <malloc.h>
+
+char *copy_poem(char *sorted_p[], char *temp, FILE *poem);
 
 char *sort_poem(char *sorted_p, char *temp, FILE *poem);
 

@@ -4,12 +4,15 @@
 
 int main() 
 {
-    FILE *poem = fopen("c://Users//Anonim//Downloads//poem_sort//onegin.txt", "r");
+    FILE *poem = fopen("test.txt", "r+w");
     
-    char *temp;
-    char *sorted_p;
+    char temp[200000];
+    char *sorted_p[10000];
 
-    sort_poem(sorted_p, temp, poem);
+    copy_poem(sorted_p, temp, poem);
+
+    for(size_t i = 0; sorted_p[i] != 0; i++)
+        printf("%s", sorted_p[i]);
 
     wrtdwn_poem();
 }
