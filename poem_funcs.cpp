@@ -1,148 +1,71 @@
-#include "str_funcs.h"
+#include "poem_funcs.h"
 
-int put_str(const char str[])
+bool str_cmpr(const char *str1, const char *str2)
 {
-    assert(str != nullptr);
-
-    for(int i = 0; str[i] != 0; ++i)
+    for(size_t num = 0; (str1[num] == 0) || (str2[num] == 0) ; num++)
     {
-        if (putchar(str[i]) == EOF) 
-            return EOF;
+        if(str1[num] > str2[num])
+            return false;
     }
-    putchar('\n');
-
-    return str[0];
-}   
-
-char* str_chr(char *str, int ch)
-{              
-    assert(str != nullptr); 
-    
-    for(int i = 0; str[i] != 0; ++i)
-    {
-        if (str[i] == ch) 
-            return &str[i];
-    }
-    return nullptr;
+    return true;
 }
 
-size_t str_length(const char *str) 
+
+
+char *sort_poem(struct poem_s *poem_data)
 {
-    assert(str !=0);
+    assert(poem_data != nullptr);
+    assert(poem_data->str_ptrs != nullptr);
 
-    size_t i = 0;
+    printf("lines num: %d\n", poem_data->poem_p_length);
 
-    for(i = 0; str[i] != 0; i++)
-        ;
-    return i;   
-}
-
-char *str_copy(char *dest, const char *src)
-{
-    assert((dest != 0) && (src != 0));
-    
-    size_t i = 0;
-
-    for(; src[i] != 0; i++)
-        dest[i] = src[i];
-    dest[i] = 0;
-
-    return dest;
-}
-
-char *str_ncopy(char *dest, const char *src, size_t count)
-{   
-    assert((src != nullptr) && (dest != nullptr));
-
-    size_t i = 0;
-
-    for(; (src[i] != 0) && (i < count); i++)
-        dest[i] = src[i];
-    
-    return dest;
-} 
-
-char *str_CAT(char *dest, const char *src)
-{    
-    assert((src != nullptr) && (dest != nullptr));
-
-    size_t dest_length = str_length(dest); //это норма? Норма ли юзать str_length внутри других функций, если можно оптимизировать?
-
-    for(size_t i = 0; src[i] != 0; i++)
+    for(size_t i = 0; i < poem_data->poem_p_length; i++)
     {
-        dest[dest_length + i] = src[i];
-    }
-    return dest;
-}
-
-char *str_nCAT(char *dest, const char *src, const size_t count)
-{
-    assert((src != nullptr) && (dest != nullptr));
-
-    size_t dest_length = str_length(dest); 
-
-    for(size_t copy_count = 0; (copy_count < count); copy_count++)
-    {
-        if(src[copy_count] != 0)
-            dest[dest_length + copy_count] = src[copy_count];
-        else
+        for(size_t cur_num = 0; cur_num < poem_data->poem_p_length - 1; cur_num++)
         {
-            dest[dest_length + copy_count] = 0;
-            break;
+            if((isalpha(*poem_data->str_ptrs[cur_num])) && (strcmp(poem_data->str_ptrs[cur_num], poem_data->str_ptrs[cur_num + 1]) == 1)) 
+            {
+                char *temp_p = poem_data->str_ptrs[cur_num];
+                poem_data->str_ptrs[cur_num] = poem_data->str_ptrs[cur_num + 1];
+                poem_data->str_ptrs[cur_num + 1] = temp_p;
+            } 
+        }   
+    }
+
+    return *poem_data->str_ptrs;
+}
+
+char *copy_poem(struct poem_s *poem_data)
+{
+    assert(poem_data->poem_file != 0);
+    assert(poem_data->strs      != 0);
+    assert(poem_data->str_ptrs  != 0);
+    printf("asserts passed\n");
+
+    fread(poem_data->strs, 1, poem_data->poem_length, poem_data->poem_file);
+    printf("fread passed\n");
+    poem_data->strs[poem_data->poem_length] = 0;
+    // printf("%s\n", poem_data->strs);
+
+    for(size_t count = 0; count < poem_data->poem_length; count++)
+    {
+        if(poem_data->strs[count] == '\n')
+        {
+            poem_data->strs[count] = 0;
+            poem_data->poem_p_length++;
+            poem_data->str_ptrs[poem_data->poem_p_length] = poem_data->strs + count + 1;
         }
     }
-    return dest;
-}
+    printf("zeroing passed\n");
+    printf("%s\n", poem_data->strs);
+} 
 
-char *f_get_s(char *str, const int count, FILE *file)
+void print_poem(struct poem_s *poem_data)
 {
-    assert((file != nullptr) && (str != nullptr));
+    printf("p length = %d\n", poem_data->poem_p_length);
 
-    if(count == 0)
-    return str;
-
-    size_t i = 0;
-
-    for(int temp_ch = 0; (temp_ch != (int) '\r') && (temp_ch != EOF) && (i < (count - 1)); i++)
+    for(size_t count = 0; count < poem_data->poem_p_length; count++)
     {
-        temp_ch = fgetc(file);
-        str[i] = (char) temp_ch;
-        // (*(str + i)) = temp_ch;
+        printf("%d: %s\n", count, poem_data->str_ptrs[count]);
     }
-    str[i + 1] = 0;
-    
-    return str;
 }
-
-char *str_dup(const char *str)
-{
-    char *str_replica = (char*) calloc(str_length(str) + 1, 1);
-
-    str_copy(str_replica, str);
-
-    return str_replica; 
-}
-
-FILE *get_line(FILE *file, char *dest, char separator)
-{
-    int temp_ch = 0;
-    size_t i = 0;
-
-    for(; ((temp_ch = getc(file)) != separator) && (temp_ch != EOF); i++)
-    {
-        dest[i] = temp_ch;
-    }   
-    dest[i] = 0;
-    
-    return file;
-}
-//puts, strchr, strlen, strcpy, strncpy, strcat, strncat, fgets, strdup, getline - именно в таком порядке. 
-
-
-
-//Разделять логические блоки
-//циклы for
-//double *a
-//вопрос про size_t
-//i++ ++i
-//документация квадратки
