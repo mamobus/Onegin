@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include "poem_funcs.h"
-#include "write_down_poem.h"
+
+int compare(const void *str1, const void *str2);
 
 int main() 
 {
     printf("main started\n");
     struct poem_s poem_data;
 
-    poem_data.poem_file = fopen("C://Users//Anonim//Downloads//Onegin-main//onegin.txt", "r"); 
+    poem_data.poem_file = fopen("C://Users//Anonim//Downloads//Onegin-main//onegin2.txt", "r"); 
     fseek(poem_data.poem_file, 0l, SEEK_END);
     poem_data.poem_length = ftell(poem_data.poem_file);
     fseek(poem_data.poem_file, 0l, SEEK_SET);   
@@ -27,6 +28,6 @@ int main()
 
     free(poem_data.strs);
     free(poem_data.str_ptrs);
-    
+
     return 0;
 }

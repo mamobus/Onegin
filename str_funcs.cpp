@@ -136,6 +136,40 @@ FILE *get_line(FILE *file, char *dest, char separator)
     
     return file;
 }
+
+int str_alpha_cmpr(const char *str1, const char *str2)
+{
+    size_t size1 = str_length(str1);
+    size_t size2 = str_length(str2);
+    char *Alpha_str1 = (char*)calloc(size1 + 1, 1);
+    char *Alpha_str2 = (char*)calloc(size2 + 1, 1);
+
+    for(size_t count = 0, A_count = 0; count < size1; count++)
+    {
+        if(isalpha(str1[count])) 
+        {
+            Alpha_str1[A_count] = str1[count];
+            A_count++;
+        }
+    }
+
+    for(size_t count = 0, A_count = 0; count < size2; count++)
+    {
+        if(isalpha(str2[count])) 
+        {
+            Alpha_str2[A_count] = str2[count];
+            A_count++;
+        }
+    }
+    
+    int res = strcmp(Alpha_str1, Alpha_str2);
+
+    free(Alpha_str1);
+    free(Alpha_str2);
+
+    return res;
+}
+
 //puts, strchr, strlen, strcpy, strncpy, strcat, strncat, fgets, strdup, getline - именно в таком порядке. 
 
 
@@ -145,4 +179,3 @@ FILE *get_line(FILE *file, char *dest, char separator)
 //double *a
 //вопрос про size_t
 //i++ ++i
-//документация квадратки

@@ -15,15 +15,7 @@ struct poem_s
     FILE *poem_file = 0;
     size_t poem_length = 0;
     size_t poem_p_length = 0;
-    // char *strs;
-    // char **str_ptrs;
-    // FILE *poem_file;
-    // size_t poem_length ;
-    // size_t poem_p_length;
 };
-
-
-bool str_cmpr(const char *str1, const char *str2);
 
 char *sort_poem(struct poem_s *poem_data);
 
